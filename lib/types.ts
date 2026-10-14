@@ -7,6 +7,14 @@ export type CheckinResponse = {
   checkedInAt?: string; // ISO; for VALID the new check-in, for DUPLICATE the original
 };
 
+export type DashboardResponse = {
+  event: { name: string; venue: string | null };
+  expected: number;
+  checkedIn: number;
+  rejected: number; // scans with INVALID_SIGNATURE or NOT_ON_LIST
+  attendees: { id: string; name: string; ticketType: string | null; checkedInAt: string | null }[];
+};
+
 export type Attendee = {
   id: string;
   event_id: string;

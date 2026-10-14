@@ -29,3 +29,10 @@
 - Gotcha: `NEXT_PUBLIC_*` are inlined at build time → changing them on Vercel needs a redeploy
 - Gotcha: use the production `*.vercel.app` URL; preview URLs sit behind Vercel deployment protection
 - Next: P4 dashboard (2s polling)
+
+## P4 — dashboard (built 2026-10-14; phone→laptop check pending)
+- Working locally: `/api/dashboard` 0/40 → 1/40 + rejected 1 after valid/dup/forged scans; `/dashboard` polls 2s
+- Decision: chained setTimeout (not setInterval) so a slow response never stacks requests; last data kept on error + "Reconnecting" badge
+- Decision: "rejected" = scan_log INVALID_SIGNATURE + NOT_ON_LIST; DUPLICATE is not counted as rejected
+- Decision: list sorted most-recent check-in first, then expected alphabetically
+- Prod URL: https://smart-rollcall.vercel.app
