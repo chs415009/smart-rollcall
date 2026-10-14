@@ -14,3 +14,11 @@
 - Decision: `iat` = attendee `created_at` → pass is deterministic, same QR on every load
 - Decision: QR error correction L (version 10, 269-char pass) — larger modules scan better off a screen
 - Watch (P2): noble async verify needs WebCrypto = secure context; works on localhost/HTTPS, NOT on http://LAN-IP
+
+## P2 — scanner + check-in (done 2026-10-14)
+- Working: `/api/checkin` returns all 4 results via curl; every scan (incl. rejects) lands in `scan_log`
+- Divergence: debounce is a *sliding* 3s window (refreshed while the same code stays in view) — literal
+  "3s after scan" would re-fire as DUPLICATE when the 4s result screen resets with phone still held
+- Decision: camera stays running under the result overlay (no restart between scans); tap overlay to dismiss
+- Decision: extra non-result UI state "verified offline — not recorded" if server unreachable; `npm run reset` clears checkins+log
+- Camera: VALID + DUPLICATE confirmed by author on desktop webcam. Next: P3 deploy + phone
