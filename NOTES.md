@@ -36,3 +36,10 @@
 - Decision: "rejected" = scan_log INVALID_SIGNATURE + NOT_ON_LIST; DUPLICATE is not counted as rejected
 - Decision: list sorted most-recent check-in first, then expected alphabetically
 - Prod URL: https://smart-rollcall.vercel.app
+- P4 phone→laptop dashboard update within 2s confirmed by author on prod
+
+## P5 — forgery demo + polish (built 2026-10-14; phone run-through pending)
+- Working: API sequence VALID → DUPLICATE → INVALID_SIGNATURE → NOT_ON_LIST; dashboard 1/40, rejected 2
+- Decision: `/demo/forge` also shows a *genuinely signed* pass for a non-existent attendee — only way to film NOT_ON_LIST
+- Decision: forged name is editable via a GET form (no client JS); scanner never displays it (payload untrusted)
+- Polish: landing page = 3 big links + small forge link; result text scales up on larger screens

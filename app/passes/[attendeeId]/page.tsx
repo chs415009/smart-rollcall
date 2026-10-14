@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import QRCode from "qrcode";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { issuePassFor } from "@/lib/issue-pass";
+import { qrSvg } from "@/lib/qr";
 import type { Attendee } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -26,9 +26,7 @@ export default async function PassPage({
   if (!data) notFound();
   const attendee = data as Attendee;
 
-  const pass = await issuePassFor(attendee);
-  // Low error correction = fewer, larger modules, which scan more reliably off a screen.
-  const svg = await QRCode.toString(pass, { type: "svg", errorCorrectionLevel: "L", margin: 4 });
+  const svg = await qrSvg(await issuePassFor(attendee));
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-white p-6 text-black">

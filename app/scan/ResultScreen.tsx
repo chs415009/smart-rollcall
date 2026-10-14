@@ -40,9 +40,9 @@ export function ResultScreen({ view, onDismiss }: { view: ScanView; onDismiss: (
       onClick={onDismiss}
       className={`fixed inset-0 z-10 flex flex-col items-center justify-center p-8 text-center ${bg}`}
     >
-      <div className="text-[9rem] leading-none font-bold">{icon}</div>
-      {title && <div className="mt-6 text-5xl font-bold break-words">{title}</div>}
-      <div className="mt-4 text-2xl font-medium">{detail}</div>
+      <div className="text-[9rem] leading-none font-bold sm:text-[12rem]">{icon}</div>
+      {title && <div className="mt-6 text-5xl font-bold break-words sm:text-7xl">{title}</div>}
+      <div className="mt-4 text-2xl font-medium sm:text-4xl">{detail}</div>
     </button>
   );
 }
