@@ -38,8 +38,14 @@
 - Prod URL: https://smart-rollcall.vercel.app
 - P4 phone→laptop dashboard update within 2s confirmed by author on prod
 
-## P5 — forgery demo + polish (built 2026-10-14; phone run-through pending)
+## P5 — forgery demo + polish (done 2026-10-14)
 - Working: API sequence VALID → DUPLICATE → INVALID_SIGNATURE → NOT_ON_LIST; dashboard 1/40, rejected 2
 - Decision: `/demo/forge` also shows a *genuinely signed* pass for a non-existent attendee — only way to film NOT_ON_LIST
 - Decision: forged name is editable via a GET form (no client JS); scanner never displays it (payload untrusted)
 - Polish: landing page = 3 big links + small forge link; result text scales up on larger screens
+- Full 4-step demo sequence run on phone against prod by author, no reloads — all passed
+
+## P6 — freeze (2026-10-14)
+- Code frozen at e6c90cd; only README + NOTES changed after. Fix-only from here.
+- README: what/why, 5-line architecture, run steps, AI-assistance note (author to confirm wording)
+- Before recording: `npm run reset`, open prod `/dashboard` (expect 0/40), phone on `/scan`
