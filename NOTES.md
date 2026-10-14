@@ -22,3 +22,10 @@
 - Decision: camera stays running under the result overlay (no restart between scans); tap overlay to dismiss
 - Decision: extra non-result UI state "verified offline — not recorded" if server unreachable; `npm run reset` clears checkins+log
 - Camera: VALID + DUPLICATE confirmed by author on desktop webcam. Next: P3 deploy + phone
+
+## P3 — deploy + real phone (done 2026-10-14)
+- Working: Vercel production deploy; author scanned VALID + DUPLICATE on a real phone off the laptop screen
+- Decision: skipped Vercel's Supabase integration — it would create a new empty DB / overwrite env vars
+- Gotcha: `NEXT_PUBLIC_*` are inlined at build time → changing them on Vercel needs a redeploy
+- Gotcha: use the production `*.vercel.app` URL; preview URLs sit behind Vercel deployment protection
+- Next: P4 dashboard (2s polling)
