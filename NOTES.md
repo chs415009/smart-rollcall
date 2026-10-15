@@ -49,3 +49,10 @@
 - Code frozen at e6c90cd; only README + NOTES changed after. Fix-only from here.
 - README: what/why, 5-line architecture, run steps, AI-assistance note (author to confirm wording)
 - Before recording: `npm run reset`, open prod `/dashboard` (expect 0/40), phone on `/scan`
+
+## P7.0 — guest-changes setup (done 2026-10-15)
+- Safety: tag `demo-v1` = e6c90cd (pushed); work on `feature/guest-changes`. Migration is additive → v1 still runs on same DB
+- Decision: 9 demo guests replace 9 placeholders (total stays 40); re-seeded once → all pass QRs changed once
+- Working: `reset:demo` ×2 and dirty→reset both give identical state (ids, notes, revoked, check-ins); James checked in
+- Gotcha: recording from `demo-v1` needs old `npm run reset` first, else James makes it 1/40
+- Limitation (pitch slide): scanner can't know revocations offline → revoked pass shows grey "verified offline"

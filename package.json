@@ -10,7 +10,8 @@
     "keygen": "node scripts/keygen.mjs",
     "seed": "node --env-file=.env.local scripts/seed.mjs",
     "check:pass": "node --experimental-strip-types --no-warnings scripts/pass-check.mjs",
-    "reset": "node --env-file=.env.local scripts/reset.mjs"
+    "reset": "node --env-file=.env.local scripts/reset.mjs",
+    "reset:demo": "node --env-file=.env.local scripts/reset-demo.mjs"
   },
   "dependencies": {
     "@noble/ed25519": "^3.2.0",
