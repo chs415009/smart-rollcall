@@ -56,3 +56,9 @@
 - Working: `reset:demo` ×2 and dirty→reset both give identical state (ids, notes, revoked, check-ins); James checked in
 - Gotcha: recording from `demo-v1` needs old `npm run reset` first, else James makes it 1/40
 - Limitation (pitch slide): scanner can't know revocations offline → revoked pass shows grey "verified offline"
+
+## P7.1 — REVOKED end to end (API verified 2026-10-15; camera check pending)
+- Working: API test — original 4 results unchanged; revoked pass → REVOKED (+name), logged; dashboard 38 expected / 2 revoked
+- Decision: REVOKED checked before DUPLICATE → a revoked guest who already checked in is still refused
+- Decision: "Revoked" stat = number of revoked *guests*; "Rejected" = scans incl. REVOKED. REJECTED_RESULTS lives in lib/types
+- Decision: REVOKED icon ⊘ vs ✕ for forged/not-on-list; same red. Revoked rows sorted last, struck through

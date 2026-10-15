@@ -51,8 +51,10 @@ export default function DashboardPage() {
   }
 
   const rate = data.expected ? Math.round((data.checkedIn / data.expected) * 100) : 0;
-  // Most recent check-ins first, then everyone still expected, alphabetically.
+  // Most recent check-ins first, then everyone still expected, alphabetically;
+  // revoked guests last.
   const rows = [...data.attendees].sort((a, b) => {
+    if (!a.revokedAt !== !b.revokedAt) return a.revokedAt ? 1 : -1;
     if (a.checkedInAt && b.checkedInAt) return b.checkedInAt.localeCompare(a.checkedInAt);
     if (a.checkedInAt) return -1;
     if (b.checkedInAt) return 1;
@@ -81,7 +83,10 @@ export default function DashboardPage() {
           {data.checkedIn} <span className="text-neutral-400">/ {data.expected}</span>
         </Stat>
         <Stat label="Attendance rate">{rate}%</Stat>
-        <Stat label="Rejected scans">{data.rejected}</Stat>
+        <Stat label="Rejected scans">
+          {data.rejected}
+          <span className="ml-3 text-base font-normal text-neutral-500">{data.revoked} revoked guests</span>
+        </Stat>
       </section>
 
       <div
@@ -100,10 +105,17 @@ export default function DashboardPage() {
         {rows.map((a) => (
           <li key={a.id} className="flex items-center justify-between px-4 py-2">
             <div>
-              <span className="font-medium">{a.name}</span>
+              <span className={a.revokedAt ? "font-medium text-neutral-400 line-through" : "font-medium"}>
+                {a.name}
+              </span>
               <span className="ml-2 text-sm text-neutral-500">{a.ticketType}</span>
             </div>
-            {a.checkedInAt ? (
+            {a.revokedAt ? (
+              <span className="text-sm text-neutral-500">
+                {a.checkedInAt && <>Checked in {timeOf(a.checkedInAt)} · </>}
+                <RevokedBadge />
+              </span>
+            ) : a.checkedInAt ? (
               <span className="text-sm text-neutral-900">
                 <span className="text-green-600">✓</span> Checked in {timeOf(a.checkedInAt)}
               </span>
@@ -115,6 +127,10 @@ export default function DashboardPage() {
       </ul>
     </main>
   );
+}
+
+function RevokedBadge() {
+  return <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">Revoked</span>;
 }
 
 function Stat({ label, children }: { label: string; children: React.ReactNode }) {

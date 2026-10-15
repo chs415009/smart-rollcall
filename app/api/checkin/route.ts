@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   if (eid !== DEMO_EVENT_ID) return reject("NOT_ON_LIST");
   const { data: attendee, error: findErr } = await db
     .from("attendees")
-    .select("id, name, ticket_type")
+    .select("id, name, ticket_type, revoked_at")
     .eq("id", aid)
     .eq("event_id", DEMO_EVENT_ID)
     .maybeSingle();
@@ -37,6 +37,10 @@ export async function POST(req: Request) {
   if (!attendee) return reject("NOT_ON_LIST");
 
   const who = { name: attendee.name, ticketType: attendee.ticket_type };
+
+  // The pass is still cryptographically valid; the host withdrew it. Checked before
+  // duplicates, so a revoked guest who already checked in is refused too.
+  if (attendee.revoked_at) return respond({ result: "REVOKED", attendee: who }, aid);
 
   // The unique constraint decides duplicates — no read-then-write race.
   const { data: inserted, error: insErr } = await db

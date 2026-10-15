@@ -11,6 +11,8 @@ const STYLES: Record<CheckinResult, { bg: string; icon: string; detail: string }
   DUPLICATE: { bg: "bg-amber-400 text-black", icon: "!", detail: "Already checked in" },
   INVALID_SIGNATURE: { bg: "bg-red-600 text-white", icon: "✕", detail: "Invalid pass — signature failed" },
   NOT_ON_LIST: { bg: "bg-red-600 text-white", icon: "✕", detail: "Not on the guest list" },
+  // Distinct icon from the ✕ of a forged pass: this one was genuine, then withdrawn.
+  REVOKED: { bg: "bg-red-600 text-white", icon: "⊘", detail: "Invitation withdrawn" },
 };
 
 const timeOf = (iso: string) =>

@@ -33,7 +33,14 @@ export default async function PassesPage() {
               className="block rounded-lg border border-neutral-200 p-4 hover:border-neutral-900"
             >
               <div className="font-medium">{a.name}</div>
-              <div className="text-sm text-neutral-500">{a.ticket_type}</div>
+              <div className="text-sm text-neutral-500">
+                {a.ticket_type}
+                {a.revoked_at && (
+                  <span className="ml-2 rounded bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
+                    Revoked
+                  </span>
+                )}
+              </div>
             </Link>
           </li>
         ))}
