@@ -23,6 +23,9 @@ export default function Home() {
       <Link href="/demo/forge" className="mt-2 text-center text-sm text-neutral-400 hover:underline">
         Demo tool: forged passes
       </Link>
+      <Link href="/host" className="text-center text-sm text-neutral-400 hover:underline">
+        Host: manage guest list
+      </Link>
     </main>
   );
 }

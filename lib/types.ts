@@ -26,6 +26,28 @@ export type DashboardResponse = {
   }[];
 };
 
+// /host guest list row (GET /api/host/guests).
+export type HostGuest = {
+  id: string;
+  name: string;
+  ticketType: string | null;
+  note: string | null;
+  revokedAt: string | null;
+  checkedInAt: string | null;
+  addedVia: "seed" | "manual" | "llm";
+};
+
+// Per-op outcome of POST /api/host/apply, in the same order as the request.
+export type ApplyResult =
+  | {
+      status: "applied";
+      op: "ADD" | "REMOVE" | "UPDATE_NOTE";
+      attendeeId: string;
+      name: string;
+      passUrl?: string; // ADD only
+    }
+  | { status: "rejected"; op: string; reason: string };
+
 export type Attendee = {
   id: string;
   event_id: string;

@@ -62,3 +62,11 @@
 - Decision: REVOKED checked before DUPLICATE → a revoked guest who already checked in is still refused
 - Decision: "Revoked" stat = number of revoked *guests*; "Rejected" = scans incl. REVOKED. REJECTED_RESULTS lives in lib/types
 - Decision: REVOKED icon ⊘ vs ✕ for forged/not-on-list; same red. Revoked rows sorted last, struck through
+- Author confirmed REVOKED + original 4 states with desktop camera
+
+## P7.2 — /host manual CRUD (API verified 2026-10-15; UI check pending)
+- Working: 401 without/wrong passcode; add / edit note / revoke each write a guest_changes row; new guest's pass → VALID
+- Decision: extra route `GET /api/host/guests` (passcode-gated) — /host needs notes + revoked guests, dashboard API has neither
+- Decision: applyChanges zod-checks each op at runtime; bad op rejected alone, rest apply (partial success). >30 ops → 400
+- Decision: passcode compared with timingSafeEqual; unset HOST_PASSCODE fails closed. Revoke confirm = native `confirm()`
+- Decision: revoked guests have no actions (no undo — non-goal); empty note on UPDATE_NOTE clears it
