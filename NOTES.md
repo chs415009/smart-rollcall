@@ -79,3 +79,12 @@
 - Decision: fixture responses show an amber "not a live model" banner in the UI — guards against recording on fixture
 - Decision: ALREADY_CHECKED_IN card's main checkbox is driven by its "revoke anyway" box (one click in the demo)
 - Divergence: demo step 7 says expected count changes — it doesn't (−Richard −James +Lena +Anna = 40). Revoked 0→2 does. Flagged
+- Author confirmed review cards, apply, Richard REVOKED / Lena VALID in the UI
+
+## P7.4 — Gemini adapter (done 2026-10-15)
+- Working: demo messages 5/5 runs → same 7 ops + targets, Priya → nothing, 0 discarded, 1.6–2.4s; check:suggest OK; genai only in gemini.ts
+- Decision: LLM_MODEL=gemini-3.5-flash-lite (author). 3.8-flash was correct when it answered but 503 "high demand" 3/5 runs, 11–15s
+- Gotcha: Gemini emits JSON keys in schema order → target_id must precede note, else UPDATE_NOTE's note lands in `question`
+- Gotcha: 3.8-flash rejects thinkingLevel MINIMAL (HTTP 400) → adapter uses LOW, works on both models
+- Gotcha: AI Studio now issues `AQ.`-prefixed keys; works for generateContent via @google/genai 2.30
+- Watch (P7.5): 503 is the main on-camera risk — no auto-retry by spec; if it hits, the UI says "unavailable, nothing changed"
