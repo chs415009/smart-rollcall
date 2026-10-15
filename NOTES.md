@@ -88,3 +88,7 @@
 - Gotcha: 3.8-flash rejects thinkingLevel MINIMAL (HTTP 400) → adapter uses LOW, works on both models
 - Gotcha: AI Studio now issues `AQ.`-prefixed keys; works for generateContent via @google/genai 2.30
 - Watch (P7.5): 503 is the main on-camera risk — no auto-retry by spec; if it hits, the UI says "unavailable, nothing changed"
+
+## P7.5 — deploy (in progress 2026-10-15)
+- Divergence (author's call): merged to main BEFORE the prod phone test, not after. Normal prod build = prod env vars for sure
+- Fallback if prod test fails: Vercel Instant Rollback + `git revert` on main; `demo-v1` tag untouched. `demo-v2` only after both demos pass
