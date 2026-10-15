@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import type { HostGuest } from "@/lib/types";
-import { GuestPanel, type GuestDraft } from "./GuestPanel";
+import { ADD_NAME_INPUT_ID, GuestPanel, type GuestDraft } from "./GuestPanel";
+import { SuggestPanel } from "./SuggestPanel";
 import * as api from "./hostApi";
 
 export default function HostPage() {
@@ -69,19 +70,38 @@ export default function HostPage() {
       </header>
       {error && <p className="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
       {guests ? (
-        <GuestPanel
-          guests={guests}
-          draft={draft}
-          setDraft={setDraft}
-          apply={async (change) => {
-            try {
-              const [result] = await api.applyChanges(passcode, [{ ...change, via: "manual" }]);
-              return result;
-            } finally {
-              await load(passcode);
-            }
-          }}
-        />
+        <div className="grid items-start gap-8 lg:grid-cols-2">
+          <GuestPanel
+            guests={guests}
+            draft={draft}
+            setDraft={setDraft}
+            apply={async (change) => {
+              try {
+                const [result] = await api.applyChanges(passcode, [{ ...change, via: "manual" }]);
+                return result;
+              } finally {
+                await load(passcode);
+              }
+            }}
+          />
+          <SuggestPanel
+            activeGuests={guests.filter((g) => !g.revokedAt).length}
+            suggest={(sources) => api.suggest(passcode, sources)}
+            apply={async (changes) => {
+              try {
+                return await api.applyChanges(passcode, changes);
+              } finally {
+                await load(passcode);
+              }
+            }}
+            onAddAsNew={(name) => {
+              setDraft({ name, note: "" });
+              const input = document.getElementById(ADD_NAME_INPUT_ID);
+              input?.scrollIntoView({ behavior: "smooth", block: "center" });
+              input?.focus({ preventScroll: true });
+            }}
+          />
+        </div>
       ) : (
         !error && <p className="text-neutral-500">Loading…</p>
       )}

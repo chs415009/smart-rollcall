@@ -48,6 +48,36 @@ export type ApplyResult =
     }
   | { status: "rejected"; op: string; reason: string };
 
+// LLM suggestions (POST /api/host/suggest), after server-side validation and enrichment.
+export type SuggestSource = { label: string; content: string };
+
+export type ProposalFlag = "ALREADY_CHECKED_IN" | "NAME_EXISTS" | "SAME_TARGET_TWICE";
+
+export type Proposal = {
+  key: string; // stable per response, for React and selection state
+  op: "ADD" | "REMOVE" | "UPDATE_NOTE" | "UNCLEAR";
+  sourceLabel?: string;
+  quote?: string;
+  name?: string; // ADD; may also be set on UNCLEAR to prefill "Add as new guest"
+  note?: string; // ADD (optional), UPDATE_NOTE (new note)
+  question?: string; // UNCLEAR
+  target?: {
+    id: string;
+    name: string;
+    ticketType: string | null;
+    note: string | null;
+    checkedInAt: string | null;
+  }; // REMOVE, UPDATE_NOTE
+  flags: ProposalFlag[];
+};
+
+export type SuggestResponse = {
+  provider: string;
+  proposals: Proposal[];
+  discarded: number; // model proposals dropped as malformed
+  truncated: boolean; // model returned more than the cap; extras dropped
+};
+
 export type Attendee = {
   id: string;
   event_id: string;

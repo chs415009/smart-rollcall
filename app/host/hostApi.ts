@@ -1,5 +1,5 @@
 // Client-side calls to /api/host/*. The passcode lives in sessionStorage for this tab only.
-import type { ApplyResult, HostGuest } from "@/lib/types";
+import type { ApplyResult, HostGuest, SuggestResponse, SuggestSource } from "@/lib/types";
 
 const STORAGE_KEY = "hostPasscode";
 
@@ -36,6 +36,13 @@ async function hostFetch<T>(path: string, passcode: string, init?: RequestInit):
 
 export const fetchGuests = (passcode: string) =>
   hostFetch<{ guests: HostGuest[] }>("/api/host/guests", passcode).then((d) => d.guests);
+
+export const suggest = (passcode: string, sources: SuggestSource[]) =>
+  hostFetch<SuggestResponse>("/api/host/suggest", passcode, {
+    method: "POST",
+    body: JSON.stringify({ sources }),
+    signal: AbortSignal.timeout(40_000), // server gives up at 30s; this only catches a dead connection
+  });
 
 export const applyChanges = (passcode: string, changes: unknown[]) =>
   hostFetch<{ results: ApplyResult[] }>("/api/host/apply", passcode, {

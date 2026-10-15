@@ -7,6 +7,9 @@ import type { ApplyResult, HostGuest } from "@/lib/types";
 
 export type GuestDraft = { name: string; note: string };
 
+// Panel B's "Add as new guest" focuses this input after prefilling the draft.
+export const ADD_NAME_INPUT_ID = "add-guest-name";
+
 const timeOf = (iso: string) =>
   new Date(iso).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 
@@ -58,6 +61,7 @@ export function GuestPanel({
 
   return (
     <section>
+      <h2 className="mb-3 text-lg font-semibold">Guest list</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -68,6 +72,7 @@ export function GuestPanel({
         <label className="flex min-w-48 flex-1 flex-col text-sm text-neutral-500">
           Name
           <input
+            id={ADD_NAME_INPUT_ID}
             required
             maxLength={100}
             value={draft.name}

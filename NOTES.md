@@ -70,3 +70,12 @@
 - Decision: applyChanges zod-checks each op at runtime; bad op rejected alone, rest apply (partial success). >30 ops → 400
 - Decision: passcode compared with timingSafeEqual; unset HOST_PASSCODE fails closed. Revoke confirm = native `confirm()`
 - Decision: revoked guests have no actions (no undo — non-goal); empty note on UPDATE_NOTE clears it
+- Author confirmed add / edit note / revoke from the UI
+
+## P7.3 — review cards on fixture (API verified 2026-10-15; UI check pending)
+- Working: fixture → 7 cards (James flagged ALREADY_CHECKED_IN); apply 6 → Richard REVOKED, Lena VALID; 6 guest_changes rows w/ label+quote
+- Decision: UPDATE_NOTE note = full replacement; prompt says keep useful old content (Tom keeps "Spouse of Sarah Okafor")
+- Decision: guest list sent as one JSON object per line; fixture reads ids from it → no network, same validator path
+- Decision: fixture responses show an amber "not a live model" banner in the UI — guards against recording on fixture
+- Decision: ALREADY_CHECKED_IN card's main checkbox is driven by its "revoke anyway" box (one click in the demo)
+- Divergence: demo step 7 says expected count changes — it doesn't (−Richard −James +Lena +Anna = 40). Revoked 0→2 does. Flagged
