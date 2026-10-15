@@ -38,10 +38,12 @@ export const outputJsonSchema = {
           op: { type: "string", enum: [...OPS] },
           source_index: { type: "integer", description: "Index of the source message this came from" },
           quote: str("Short excerpt from that source, at most ~15 words"),
-          name: str("ADD: the new guest's name"),
-          note: str("ADD: optional note. UPDATE_NOTE: the full new note"),
+          // Order matters: Gemini emits keys in schema order, so target_id must come
+          // before note or an UPDATE_NOTE can't set its note after its target.
           target_id: str("REMOVE / UPDATE_NOTE: an id copied from the guest list"),
-          question: str("UNCLEAR: what the host needs to decide"),
+          name: str("ADD: the new guest's name"),
+          note: str("ADD: optional note. UPDATE_NOTE: required — the full new note text"),
+          question: str("UNCLEAR only: what the host needs to decide. Leave unset for every other op"),
         },
         required: ["op"],
       },

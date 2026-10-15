@@ -16,11 +16,12 @@ export interface LlmProvider {
 
 export type LlmErrorKind = "rate_limited" | "timeout" | "bad_output" | "unavailable";
 
+// Plain field instead of a constructor parameter property so `npm run check:suggest`
+// can load this file with Node's type stripping.
 export class LlmError extends Error {
-  constructor(
-    public kind: LlmErrorKind,
-    message: string,
-  ) {
+  kind: LlmErrorKind;
+  constructor(kind: LlmErrorKind, message: string) {
     super(message);
+    this.kind = kind;
   }
 }

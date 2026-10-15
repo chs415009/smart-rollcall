@@ -11,9 +11,11 @@
     "seed": "node --env-file=.env.local scripts/seed.mjs",
     "check:pass": "node --experimental-strip-types --no-warnings scripts/pass-check.mjs",
     "reset": "node --env-file=.env.local scripts/reset.mjs",
-    "reset:demo": "node --env-file=.env.local scripts/reset-demo.mjs"
+    "reset:demo": "node --env-file=.env.local scripts/reset-demo.mjs",
+    "check:suggest": "node --experimental-strip-types --no-warnings scripts/suggest-check.mjs"
   },
   "dependencies": {
+    "@google/genai": "^2.30.0",
     "@noble/ed25519": "^3.2.0",
     "@supabase/supabase-js": "^2.117.3",
     "html5-qrcode": "^2.3.8",
