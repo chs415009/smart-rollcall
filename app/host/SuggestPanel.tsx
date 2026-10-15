@@ -124,6 +124,8 @@ export function SuggestPanel({
       });
       setApplied(await apply(changes));
       setResponse(null);
+      // Ready for the next batch. On error (catch below) the messages are kept for a retry.
+      setSources([{ label: "", content: "" }]);
     } catch (err) {
       setError(`Not applied: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
