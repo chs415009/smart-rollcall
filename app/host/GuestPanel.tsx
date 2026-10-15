@@ -11,6 +11,9 @@ export const EMPTY_DRAFT: GuestDraft = { name: "", note: "", ticketType: TICKET_
 // Panel B's "Add as new guest" focuses this input after prefilling the draft.
 export const ADD_NAME_INPUT_ID = "add-guest-name";
 
+// Shared by every add-form control so inputs and the select line up at the same height.
+const FIELD = "mt-1 h-10 w-full rounded border border-neutral-300 bg-white px-3 text-base text-neutral-900";
+
 const timeOf = (iso: string) =>
   new Date(iso).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 
@@ -70,9 +73,10 @@ export function GuestPanel({
             setDraft(EMPTY_DRAFT),
           );
         }}
-        className="mb-4 flex flex-wrap items-end gap-2 rounded-lg border border-neutral-200 p-4"
+        // Two rows, two columns: Name | Ticket, then Note | button. Right column fixed width.
+        className="mb-4 grid grid-cols-[1fr_8rem] items-end gap-3 rounded-lg border border-neutral-200 p-4"
       >
-        <label className="flex min-w-48 flex-1 flex-col text-sm text-neutral-500">
+        <label className="flex flex-col text-sm text-neutral-500">
           Name
           <input
             id={ADD_NAME_INPUT_ID}
@@ -80,7 +84,7 @@ export function GuestPanel({
             maxLength={100}
             value={draft.name}
             onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-            className="mt-1 rounded border border-neutral-300 px-3 py-2 text-base text-neutral-900"
+            className={FIELD}
           />
         </label>
         <label className="flex flex-col text-sm text-neutral-500">
@@ -88,26 +92,26 @@ export function GuestPanel({
           <select
             value={draft.ticketType}
             onChange={(e) => setDraft({ ...draft, ticketType: e.target.value as TicketType })}
-            className="mt-1 rounded border border-neutral-300 px-2 py-2 text-base text-neutral-900"
+            className={FIELD}
           >
             {TICKET_TYPES.map((t) => (
               <option key={t}>{t}</option>
             ))}
           </select>
         </label>
-        <label className="flex min-w-48 flex-[2] flex-col text-sm text-neutral-500">
+        <label className="flex flex-col text-sm text-neutral-500">
           Note (optional)
           <input
             maxLength={300}
             value={draft.note}
             onChange={(e) => setDraft({ ...draft, note: e.target.value })}
-            className="mt-1 rounded border border-neutral-300 px-3 py-2 text-base text-neutral-900"
+            className={FIELD}
           />
         </label>
         <button
           type="submit"
           disabled={busy || !draft.name.trim()}
-          className="rounded bg-neutral-900 px-4 py-2 font-medium text-white disabled:opacity-40"
+          className="h-10 rounded bg-neutral-900 px-4 font-medium text-white disabled:opacity-40"
         >
           Add guest
         </button>
