@@ -2,7 +2,7 @@
 // Idempotent: deletes the existing demo event (cascades) and re-creates it with the
 // same fixed id, so NEXT_PUBLIC_DEMO_EVENT_ID never changes.
 import { createClient } from "@supabase/supabase-js";
-import { DEMO_GUESTS } from "./demo-guests.mjs";
+import { DEMO_GUESTS, FILLER_GUESTS } from "./demo-guests.mjs";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -13,20 +13,6 @@ if (!url || !serviceKey || !eventId) {
 }
 
 const db = createClient(url, serviceKey, { auth: { persistSession: false } });
-
-// Obviously fictional names only. 31 of these + 9 named P7 demo guests = 40.
-const NAMES = [
-  "Ada Placeholder", "Zed Placeholder", "Mona Mockingbird", "Rex Sandbox",
-  "Pixel McDemo", "Juniper Fakename", "Otto Fixture", "Luna Lorem",
-  "Ivy Ipsum", "Barnaby Stub", "Clara Configure", "Dexter Dummy",
-  "Echo Example", "Felix Foobar", "Greta Gadget", "Hugo Hypothetical",
-  "Iris Instance", "Jasper Json", "Kiki Keystroke", "Leo Localhost",
-  "Maple Mockup", "Nico Nullable", "Olive Offline", "Percy Prototype",
-  "Quinn Queryson", "Rosa Runtime", "Sly Sample", "Tess Testcase",
-  "Umberto Undefined", "Vera Variable", "Wally Widget",
-];
-
-const TICKET_TYPES = ["General", "General", "General", "VIP", "Speaker"];
 
 const { error: delErr } = await db.from("events").delete().eq("id", eventId);
 if (delErr) throw delErr;
@@ -42,15 +28,7 @@ const { error: evErr } = await db.from("events").insert({
 if (evErr) throw evErr;
 
 const email = (name) => `${name.toLowerCase().replace(/[^a-z]+/g, ".")}@example.com`;
-const rows = [
-  ...DEMO_GUESTS.map((g) => ({ event_id: eventId, ...g, email: email(g.name) })),
-  ...NAMES.map((name, i) => ({
-    event_id: eventId,
-    name,
-    email: email(name),
-    ticket_type: TICKET_TYPES[i % TICKET_TYPES.length],
-  })),
-];
+const rows = [...DEMO_GUESTS, ...FILLER_GUESTS].map((g) => ({ event_id: eventId, ...g, email: email(g.name) }));
 const { error: atErr } = await db.from("attendees").insert(rows);
 if (atErr) throw atErr;
 

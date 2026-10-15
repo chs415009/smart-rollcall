@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import type { HostGuest } from "@/lib/types";
-import { ADD_NAME_INPUT_ID, GuestPanel, type GuestDraft } from "./GuestPanel";
+import { ADD_NAME_INPUT_ID, EMPTY_DRAFT, GuestPanel, type GuestDraft } from "./GuestPanel";
 import { SuggestPanel } from "./SuggestPanel";
 import * as api from "./hostApi";
 
@@ -11,7 +11,7 @@ export default function HostPage() {
   const [passcode, setPasscode] = useState<string | null>(null); // null = not yet read from storage
   const [guests, setGuests] = useState<HostGuest[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [draft, setDraft] = useState<GuestDraft>({ name: "", note: "" });
+  const [draft, setDraft] = useState<GuestDraft>(EMPTY_DRAFT);
 
   const load = useCallback(async (code: string) => {
     try {
@@ -95,7 +95,7 @@ export default function HostPage() {
               }
             }}
             onAddAsNew={(name) => {
-              setDraft({ name, note: "" });
+              setDraft({ ...EMPTY_DRAFT, name });
               const input = document.getElementById(ADD_NAME_INPUT_ID);
               input?.scrollIntoView({ behavior: "smooth", block: "center" });
               input?.focus({ preventScroll: true });

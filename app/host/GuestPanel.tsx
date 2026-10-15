@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { ChangeOp } from "@/lib/changes"; // type only — erased, no server code in the bundle
-import type { ApplyResult, HostGuest } from "@/lib/types";
+import { TICKET_TYPES, type ApplyResult, type HostGuest, type TicketType } from "@/lib/types";
 
-export type GuestDraft = { name: string; note: string };
+export type GuestDraft = { name: string; note: string; ticketType: TicketType };
+export const EMPTY_DRAFT: GuestDraft = { name: "", note: "", ticketType: TICKET_TYPES[0] };
 
 // Panel B's "Add as new guest" focuses this input after prefilling the draft.
 export const ADD_NAME_INPUT_ID = "add-guest-name";
@@ -65,7 +66,9 @@ export function GuestPanel({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          void run({ op: "ADD", name: draft.name, note: draft.note }, () => setDraft({ name: "", note: "" }));
+          void run({ op: "ADD", name: draft.name, note: draft.note, ticketType: draft.ticketType }, () =>
+            setDraft(EMPTY_DRAFT),
+          );
         }}
         className="mb-4 flex flex-wrap items-end gap-2 rounded-lg border border-neutral-200 p-4"
       >
@@ -79,6 +82,18 @@ export function GuestPanel({
             onChange={(e) => setDraft({ ...draft, name: e.target.value })}
             className="mt-1 rounded border border-neutral-300 px-3 py-2 text-base text-neutral-900"
           />
+        </label>
+        <label className="flex flex-col text-sm text-neutral-500">
+          Ticket
+          <select
+            value={draft.ticketType}
+            onChange={(e) => setDraft({ ...draft, ticketType: e.target.value as TicketType })}
+            className="mt-1 rounded border border-neutral-300 px-2 py-2 text-base text-neutral-900"
+          >
+            {TICKET_TYPES.map((t) => (
+              <option key={t}>{t}</option>
+            ))}
+          </select>
         </label>
         <label className="flex min-w-48 flex-[2] flex-col text-sm text-neutral-500">
           Note (optional)

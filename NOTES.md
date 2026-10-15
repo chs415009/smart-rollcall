@@ -92,3 +92,6 @@
 ## P7.5 — deploy (in progress 2026-10-15)
 - Divergence (author's call): merged to main BEFORE the prod phone test, not after. Normal prod build = prod env vars for sure
 - Fallback if prod test fails: Vercel Instant Rollback + `git revert` on main; `demo-v1` tag untouched. `demo-v2` only after both demos pass
+- Author: prod passes overall
+- Change (author): ticket types are General | VIP only (Speaker dropped). Manual ADD has a ticket select; LLM ADDs default General
+- Decision: ticket type isn't in the signed pass → reset:demo restores seed ticket types too, no re-seed, no QR changes

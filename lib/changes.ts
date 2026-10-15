@@ -2,10 +2,10 @@
 // applied LLM suggestions both end up here via POST /api/host/apply.
 import { z } from "zod";
 import { supabaseAdmin } from "./supabase-server";
-import type { ApplyResult } from "./types";
+import { TICKET_TYPES, type ApplyResult, type TicketType } from "./types";
 
 export type ChangeOp =
-  | { op: "ADD"; name: string; note?: string }
+  | { op: "ADD"; name: string; note?: string; ticketType?: TicketType }
   | { op: "REMOVE"; attendeeId: string }
   | { op: "UPDATE_NOTE"; attendeeId: string; note: string };
 
@@ -30,6 +30,7 @@ const changeSchema = z.discriminatedUnion("op", [
     op: z.literal("ADD"),
     name: z.string().trim().min(1, "Name is required").max(MAX_NAME, `Name must be at most ${MAX_NAME} characters`),
     note: note.optional(),
+    ticketType: z.enum(TICKET_TYPES).optional(), // LLM suggestions omit it → General
     ...meta,
   }),
   z.object({ op: z.literal("REMOVE"), attendeeId: z.uuid("Unknown guest"), ...meta }),
@@ -69,13 +70,14 @@ async function applyOne(eventId: string, raw: unknown): Promise<ApplyResult> {
 
   if (c.op === "ADD") {
     const noteValue = c.note || null;
+    const ticketType = c.ticketType ?? TICKET_TYPES[0];
     const { data, error } = await db
       .from("attendees")
-      .insert({ event_id: eventId, name: c.name, note: noteValue, added_via: c.via })
+      .insert({ event_id: eventId, name: c.name, note: noteValue, ticket_type: ticketType, added_via: c.via })
       .select("id, name")
       .single();
     if (error) throw error;
-    await writeAudit(audit(data.id, { name: data.name, note: noteValue }));
+    await writeAudit(audit(data.id, { name: data.name, note: noteValue, ticket_type: ticketType }));
     return { status: "applied", op: "ADD", attendeeId: data.id, name: data.name, passUrl: `/passes/${data.id}` };
   }
 

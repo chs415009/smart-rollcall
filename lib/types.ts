@@ -26,6 +26,10 @@ export type DashboardResponse = {
   }[];
 };
 
+// Ticket types a host can assign. New guests default to the first.
+export const TICKET_TYPES = ["General", "VIP"] as const;
+export type TicketType = (typeof TICKET_TYPES)[number];
+
 // /host guest list row (GET /api/host/guests).
 export type HostGuest = {
   id: string;
